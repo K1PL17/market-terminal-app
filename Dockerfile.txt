@@ -1,0 +1,20 @@
+# 1. Gunakan image Python versi ringan (slim)
+FROM python:3.10-slim
+
+# 2. Tentukan direktori kerja
+WORKDIR /app
+
+# 3. Salin file requirements.txt
+COPY requirements.txt .
+
+# 4. Instal library
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 5. Salin semua file proyek (NewsIntel.py)
+COPY . .
+
+# 6. EKSPOS PORT 7860 (Aturan wajib Hugging Face)
+EXPOSE 7860
+
+# 7. Jalankan aplikasi Gunicorn di port 7860
+CMD ["gunicorn", "NewsIntel:app", "--bind", "0.0.0.0:7860"]
