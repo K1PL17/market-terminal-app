@@ -1,0 +1,20 @@
+# 1. Gunakan image Python versi ringan (slim) agar proses build cepat
+FROM python:3.10-slim
+
+# 2. Tentukan folder kerja (working directory) di dalam container
+WORKDIR /app
+
+# 3. Salin file requirements.txt dari komputer/GitHub Anda ke dalam container
+COPY requirements.txt .
+
+# 4. Instal semua library yang dibutuhkan tanpa menyimpan cache agar ukuran file tetap kecil
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 5. Salin sisa file aplikasi Anda (seperti app.py) ke dalam container
+COPY . .
+
+# 6. Ekspos port 8000 (port standar yang sering diminta server cloud)
+EXPOSE 8000
+
+# 7. Perintah wajib untuk menyalakan server aplikasi menggunakan Gunicorn
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:8000"]
